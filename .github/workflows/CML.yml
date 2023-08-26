@@ -1,0 +1,22 @@
+name: test1
+on: [push]
+jobs:
+  run:
+    run-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v3
+     - uses: iterative/setup-cml@v1
+     - name: Train Model
+     run: |
+        # Your workflow goes here 
+        pip install -r requirements.txt
+        python script.py
+      - name: Write CML report 
+      env:
+        REPO_TOKEN: ${{secrets.TOKEN}}
+      run: |
+      # Post report comments on GitHub PRs
+      echo "##Model performance" > report.md
+      cat results.txt >> report.md
+      cml comment report.md
+      
